@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="">
+    <div class="row">
+        <div class="col">
+            <div class="card card-custom gutter-b">
+                <div class="card-header d-flex">
+                    <div class="card-title">
+                        <h3 class="card-label">Orders List</h3>
+                    </div>
+                    <div class="ml-auto">
+                        <a href="{% url 'raw_orders_create' %}" class="btn btn-info">Add New</a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    {% comment %} {% if filter %}
+                    {% include 'includes/filter.html' %}
+                    {% endif %} {% endcomment %}
+                    {% comment %} {% if object_list %} {% endcomment %}
+                    <!--begin: Table-->
+                    <div class="table-responsive">
+                        <table class="table" id="kt_datatable" style="width: 100%">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Order Placer</th>
+                                    <th>Items</th>
+                                    <th>Price Per Unit</th>
+                                    <th>Total Price</th>
+                                    <th>Order Status</th>
+                                    <th style="width: 180px">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                               
+                                {% for order in object_list %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ order.order_by }}</td>
+                                    <td>{{ order.item_is }}</td>
+                                    <td>{{ order.asking_price }}</td>
+                                    <td>{{ order.total_price }}
+                                    <td>{{ order.order_status }}</td>
+                                    <td>
+                                        <a class="btn btn-sm btn-light-warning"
+                                            href="{% url 'raw_orders_update' order.pk %}"><i class="far fa-edit btn btn-success"></i>
+                                        </a>
+                                        <a class="btn btn-sm btn-light-danger"
+                                            href="{% url 'raw_orders_delete' order.pk %}"><i
+                                            class="far fa-trash-alt btn btn-danger"></i></a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <!--end: Datatable-->
+                    {% comment %} {% else %}
+                    {% include 'includes/no_data_found.html' %}
+                    {% endif %} {% endcomment %}
+                </div>
+                <div class="card-footer">
+                    {% comment %} {% include 'includes/pagination.html' %} {% endcomment %}
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div id = "divName">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table text-center" id="kt_datatable" style="width: 100%">
+                    <thead>
+                        <tr >
+                            <th>Serials</th>
+                            <th>Product</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th style="width: 180px">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                       
+                        {% comment %} {% for product in object_list %}
+                            {% if product.product_qty > 0 or user.groups.name == 'Admin' %}
+                        <tr>
+                            <td>{{ forloop.counter }}</i></a></td>
+                            <td>{{ product.product_name | truncatechars:50}}</td>
+                            <td>{{ product.product_price }}</td>
+                            <td>{{ product.product_qty }}</td>
+                            <td>
+                                    {% if user.groups.name == 'Admin' %}
+                                <a class="btn btn-sm btn-light-warning"
+                                    href="{% url 'product_update' product.pk %}"><i class="far fa-edit btn btn-success"></i></i>
+                                </a>
+                                <a class="btn btn-sm btn-light-danger"
+                                    href="{% url 'product_delete' product.pk %}"><i
+                                    class="far fa-trash-alt btn btn-danger"></i></a>
+
+                                {% elif  user.groups.name == 'Buyer' %}
+                                <a class="btn btn-sm btn-light-danger"
+                                href="{% url 'product_details' product.pk %}"><i
+                                class=" fa fa-eye btn btn-success">
+                                {% endif %}
+                            </td>
+                        </tr>
+                            {% endif %}
+                        {% endfor %} {% endcomment %}
+                    </tbody>
+                </table>
+            </div>
+            <!--end: Datatable-->
+            {% comment %} {% else %}
+            {% include 'includes/no_data_found.html' %}
+            {% endif %} {% endcomment %}
+        </div>
+    </div>
+<button class = "btn btn-primary" type = "submit" onClick = "PrintDiv('ToPrint');" value = "Print">Print</button>
+{% endblock %}
+
+{% block js %} 
+    
+    function PrintDiv(divName){
+        var printContents = document.getElementById(divName).innerHTML;
+        var originalContents = document.getElementById(divName).innerHTML;
+        document.getElementById(divName).innerHTML = printContents;
+        window.print();
+        document.body.innerHTML = originalContents;        
+    }
+    
+{% endblock %}

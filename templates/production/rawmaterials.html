@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %} 
+
+{% block content %}
+<div class="">
+    <div class="row">
+        <div class="col">
+            <div class="card card-custom gutter-b">
+                {% comment %}  {% endcomment %}
+                <div class="card-header d-flex">
+                    <div class="">
+                        <h3 class="card-label">The Required Raw Materials</h3>
+                    </div>
+                    {% if user.groups.name == "Admin" %}
+                    <div class="ml-auto">
+                        <a href="{% url 'raw_materials_create' %}" class="btn btn-info">Add items</a>
+                    </div>
+                    {% endif %}
+                </div>
+                {% comment %}  {% endcomment %}
+                <div class="card-body">
+                    {% comment %} {% if filter %}
+                    {% include 'includes/filter.html' %}
+                    {% endif %} {% endcomment %}
+                    {% comment %} {% if object_list %} {% endcomment %}
+                    <!--begin: Table-->
+                    <div class="table-responsive">
+                        <table class="table" id="kt_datatable" style="width: 100%">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Name</th>
+                                    <th>Description </th>
+                                    <th>Quantity</th>
+                                    <th style="width: 180px">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                               
+                                {% for materials in object_list %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ materials.raw_name }}</td>
+                                    <td>{{ materials.raw_description }}</td>
+                                    <td>{{ materials.raw_qty }}</td>
+                                    <td>
+                                        {% if user.groups.name == 'Admin' %}
+                                        <a class="btn btn-sm btn-light-warning"
+                                            href="{% url 'raw_materials_update' materials.pk %}"><i class="far fa-edit btn btn-success"></i></i>
+                                        </a>
+                                        <a class="btn btn-sm btn-light-danger"
+                                            href="{% url 'raw_materials_delete' materials.pk %}"><i
+                                            class="far fa-trash-alt btn btn-danger"></i></a>
+                                        {% elif user.groups.name == 'Supplier' %}
+                                        <a class="btn btn-sm btn-light-danger"
+                                            href="{% url 'raw_materials_details' materials.pk %}"><i
+                                            class="far fa-eye btn btn-warning"></i></a>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <!--end: Datatable-->
+                    {% comment %} {% else %}
+                    {% include 'includes/no_data_found.html' %}
+                    {% endif %} {% endcomment %}
+                </div>
+                <div class="card-footer">
+                    {% comment %} {% include 'includes/pagination.html' %} {% endcomment %}
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

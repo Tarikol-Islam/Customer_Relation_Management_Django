@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="">
+    <div class="row">
+        <div class="col">
+            <div class="card card-custom gutter-b ">
+                <div class="card-header d-flex">
+                    <div class="card-title">
+                        <h3 class="card-label">Orders List</h3>
+                    </div>
+                    {% comment %} <div class="card-toolbar ml-auto">
+                        <a href="{% url 'orders_create' %}" class="btn btn-info">Add New</a>
+                    </div> {% endcomment %}
+                </div>
+                <div class="card-body">
+                    {% comment %} {% if filter %}
+                    {% include 'includes/filter.html' %}
+                    {% endif %} {% endcomment %}
+                    {% comment %} {% if object_list %} {% endcomment %}
+                    <!--begin: Table-->
+                    <div class="table-responsive">
+                        <table class="table" id="kt_datatable" style="width: 100%">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Order</th>
+                                    <th>Items</th>
+                                    <th>Quantity</th>
+                                    <th>Details</th>
+                                    {% if user.groups.name == 'Admin' %}
+                                    <th>Status</th>
+                                    <th>Customer</th>
+                                    <th>Total</th>
+                                    <th>Ordering Date</th>
+                                    {% endif %}
+                                    <th>Payment</th>
+                                    <th>Delivery Date</th>
+                                    <th style="width: 180px">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                               
+                                {% for order in object_list %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ order.order_name | truncatechars:10}}</td>
+                                    <td>{{ order.order_items }}</td>
+                                    <td>{{ order.order_qty }}</td>
+                                    <td>{{ order.order_details | truncatechars:10}}</td>
+                                    {% if user.groups.name == 'Admin' %}
+                                    <td>{{ order.payment_status }}</td>
+                                    <td>{{ order.order_status }}</td>
+                                    <td>{{ order.order_creator }}</td>
+                                    <td>{{ order.order_date }}</td>
+                                    {% endif %}
+                                    <td>{{ order.order_total_price }}</td>
+                                    <td>{{ order.delivery_date }}</td>
+                                    <td>{% if user.groups.name == 'Admin' or order.order_status == 'New' %}
+                                        <a class="btn btn-sm btn-dark-warning"
+                                            href="{% url 'orders_update' order.pk %}"><i class="far fa-edit btn btn-success"></i>
+                                        </a>
+                                        
+                                        <a class="btn btn-sm btn-light-danger"
+                                            href="{% url 'orders_delete' order.pk %}"><i
+                                            class="far fa-trash-alt btn btn-danger"></i></a>
+                                        {% elif order.order_status != 'New' %}
+                                        <a class="btn btn-sm btn-light-danger"
+                                        href="{% url 'order_details' order.pk %}"><i
+                                        class=" fa fa-eye btn btn-success">
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <!--end: Datatable-->
+                    {% comment %} {% else %}
+                    {% include 'includes/no_data_found.html' %}
+                    {% endif %} {% endcomment %}
+                </div>
+                <div class="card-footer">
+                    {% comment %} {% include 'includes/pagination.html' %} {% endcomment %}
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+    
+
+    <table class="table list-group-item-secondary my-1" id="kt_datatable">
+        <thead>
+        <tr ><h3 class="text-center"> <strong>Product Details</strong></h3></tr>
+        <tr>
+            <th>Product Name</th>
+            <th>Product Price</th>
+            <th>Available Quantity</th>
+            
+        </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ object.product_name }}</td>
+                <td>{{ object.product_price }}</td>
+                <td>{{ object.product_qty }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <li class="list-group-item list-group-item-info my-1">{{ object.product_desc }}</li>
+        <div class="card" style="width: 18rem;">
+            <img src="{{object.product_pic.url}}" class="card-img-top" alt="...">
+        </div>
+        <li><a class="btn btn-sm btn btn-success" href="{% url 'orders_create' object.pk %}">Place Order</a></li>
+
+{% endblock %}

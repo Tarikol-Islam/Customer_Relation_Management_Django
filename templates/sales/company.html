@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="">
+    <div class="row">
+        <div class="col">
+            <div class="card card-custom gutter-b ">
+                <div class="card-header d-flex">
+                    <div class="card-title ">
+                        <h3 class="card-label">Company List</h3>
+                    </div>
+                    <div class="card-toolbar ml-auto">
+                        <a href="{% url 'company_create' %}" class="btn btn-info">Add New</a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    {% comment %}{% endif %}{% endcomment %}
+                    {% comment %}{% endcomment %}
+                    <!-- begin: Table -->
+                    <div class="table-responsive">
+                        <table class="table" id="kt_datatable" style="width: 100%">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Company</th>
+                                    <th>Address</th>
+                                    <th>Product</th>
+                                    <th>Account.</th>
+                                    <th>Webpage</th>
+                                    <th>Email</th>
+                                    <th>Contact No.</th>
+                                    <th>Representative</th>
+                                    <th>Status</th>
+                                    <th style="width: 180px">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                               
+                                {% for company in object_list %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ company.business_name }}</td>
+                                    <td>{{ company.business_address }}</td>
+                                    <td>{{ company.business_product }}</td>
+                                    <td>{{ company.business_bank_account }}</td>
+                                    <td>{{ company.business_website | truncatechars:10 }}</td>
+                                    <td>{{ company.business_email | truncatechars:10}}</td>
+                                    <td>{{ company.business_contact_number }}</td>
+                                    <td>{{ company.business_contact_person }}</td>
+                                    <td>{{ company.business_status }}</td>
+                                    <td>
+                                        <a class="btn btn-sm btn-light-warning"
+                                            href="{% url 'company_update' company.pk %}"><i class="far fa-edit btn btn-success"></i>
+                                        </a>
+                                        <a class="btn btn-sm btn-light-danger"
+                                            href="{% url 'company_delete' company.pk %}"><i
+                                                class="far fa-trash-alt btn btn-danger"></i></a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <!--end: Datatable-->
+                    {% comment %}{% endcomment %}
+                </div>
+                <div class="card-footer">
+                    {% comment %}{% endcomment %}
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content %}
+<table class="table list-group-item-secondary my-1 text-center" id="kt_datatable">
+    <thead>
+    <tr ><h3 class="text-center"> <strong>Raw Material Details</strong></h3></tr>
+    <tr>
+        <th>Raw Material</th>
+        <th>Quantity</th>
+        <th>Quantity Unit</th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr class = "text-center">
+            <td>{{ object.raw_name }}</td>
+            <td>{{ object.raw_qty }}</td>
+            <td>{{ object.raw_qty_unit }}</td>
+        </tr>
+        
+    </tbody>
+    
+</table>
+<table class="table list-group-item-secondary my-1" id="kt_datatable">
+<tbody>
+        <th class="list-group-item list-group-item-info my-1">
+            {{ object.raw_description }}
+        </th>
+    </tbody>
+</table>
+
+<li><a class="btn btn-sm btn btn-success" href="{% url 'raw_orders_create'  object.pk %}">Place Order</a></li>
+
+{% endblock %}

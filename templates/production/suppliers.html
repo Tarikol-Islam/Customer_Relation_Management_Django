@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="">
+    <div class="row">
+        <div class="col">
+            <div class="card card-custom gutter-b">
+                <div class="card-header d-flex">
+                    <div class="card-title">
+                        <h3 class="card-label">Our Suppliers</h3>
+                    </div>
+                    <div class="card-toolbar ml-auto">
+                        <a href="{% url 'suppliers_create' %}" class="btn btn-info">Add New</a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    {% comment %} {% if filter %}
+                    {% include 'includes/filter.html' %}
+                    {% endif %} {% endcomment %}
+                    {% comment %} {% if object_list %} {% endcomment %}
+                    <!--begin: Table-->
+                    <div class="table-responsive">
+                        <table class="table" id="kt_datatable" style="width: 100%">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Name </th>
+                                    <th>Bio</th>
+                                    <th>Address</th>
+                                    <th>Contact</th>
+                                    <th>Birthdate</th>
+                                    <th>Supplying Items</th>
+                                    <th>Supplier Image</th>
+                                    <th style="width: 180px">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                               
+                                {% for supplier in object_list %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ supplier.supplier_name }}</td>
+                                    <td>{{ supplier.supplier_bio }}</td>
+                                    <td>{{ supplier.supplier_address }}</td>
+                                    <td>{{ supplier.supplier_contact }}</td>
+                                    <td>{{ supplier.supplier_birthdate }}</td>
+                                    <td>{{ supplier.supplier_supply}}</td>
+                                    <td>{{ supplier.supplier_img }}</td>
+                                    <td>
+                                        <a class="btn btn-sm btn-light-warning"
+                                            href="{% url 'suppliers_update' supplier.pk %}"><i class="far fa-edit btn btn-success"></i>
+                                        </a>
+                                        <a class="btn btn-sm btn-light-danger"
+                                            href="{% url 'suppliers_delete' supplier.pk %}"><i
+                                            class="far fa-trash-alt btn btn-danger"></i></a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <!--end: Datatable-->
+                    {% comment %} {% else %}
+                    {% include 'includes/no_data_found.html' %}
+                    {% endif %} {% endcomment %}
+                </div>
+                <div class="card-footer">
+                    {% comment %} {% include 'includes/pagination.html' %} {% endcomment %}
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

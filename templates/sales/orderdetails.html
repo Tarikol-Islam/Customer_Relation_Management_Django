@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+    
+
+    <table class="table list-group-item-secondary my-1" id="kt_datatable">
+        <thead>
+        <tr ><h3 class="text-center"> <strong>Order Details</strong></h3></tr>
+        <tr>
+            <th>order_name</th>
+            <th>order_items</th>
+            <th>order_qty</th>
+            <th>order_status</th>
+            <th>order_total_price</th>
+            <th>order_date</th>
+            <th>delivery_date</th>
+            
+            
+        </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ object.order_name }}</td>
+                <td>{{ object.order_items }}</td>
+                <td>{{ object.order_qty }}</td>
+                <td>{{ object.order_status }}</td>
+                <td>{{ object.order_total_price }}</td>
+                <td>{{ object.order_date }}</td>
+                <td>{{ object.delivery_date }}</td>
+            </tr>
+        </tbody>
+    </table>
+    {% comment %} <li class="list-group-item list-group-item-info my-1">{{ object.product_desc }}</li> {% endcomment %}
+        {% comment %} <div class="card" style="width: 18rem;">
+            <img src="{{object.product_pic.url}}" class="card-img-top" alt="...">
+        </div> {% endcomment %}
+        <li><a class="btn btn-sm btn btn-success" href="{% url 'orders_list' %}">Back</a></li>
+
+{% endblock %}

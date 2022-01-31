@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div id = "">
+        <h1>{{ object_list }}</h1>
+    </div>
+<button class = "btn btn-primary" type = "submit" onClick = "PrintDiv('ToPrint');" value = "Print">Print</button>
+{% endblock %}
+
+{% block js %} 
+    function PrintDiv(divName){
+        var printContents = document.getElementById(divName).innerHTML;
+        var originalContents = document.getElementById(divName).innerHTML;
+        document.getElementById(divName).innerHTML = printContents;
+        window.print();
+        document.body.innerHTML = originalContents;        
+    }
+{% endblock %}

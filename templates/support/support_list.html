@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+   <!-- Begin Page Content -->
+   <div class="container-fluid">
+
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mt-4">
+    {% if user.groups.name != 'Admin' %}
+    <h1 class="h3 mb-0 text-gray-800">Support</h1>
+    {% endif %}
+    </div>  <div class="card-body">
+      {% if filter %}
+        <div class="p-7 bg-dark-o-50 rounded">
+          <div class="row align-items-center">
+              {% if user.groups.name == 'Admin' %}
+              <div class="col">
+                  {% crispy filter.form %}
+              </div>
+              {% endif %}
+          </div>
+
+      </div>
+      {% endif %}
+      {% if object_list %}
+      <!--begin: Table-->
+      <div class="table-responsive">
+          <table class="table" id="kt_datatable" style="width: 100%">
+              <thead>
+                  <tr>
+                      <th>#</th>
+                      <th>Issue Creator</th>
+                      <th>Creator Type</th>
+                      <th>Message</th>
+                      <th>Admin Feedback</th>
+                      <th>Status</th>
+                      <th style="width: 180px">Reply</th>
+                  </tr>
+              </thead>
+              <tbody>
+                 
+                  {% for Issues in object_list %}
+                  <tr>
+                      <td>{{ forloop.counter }}</td>
+                      <td>{{ Issues.user }}</td>
+                      <td>{{ Issues.user.groups.name }}
+                      <td>{{ Issues.message | truncatechars:10}}</td>
+                      <td>{{ Issues.admin_reply }}</td>
+                      <td>{{ Issues.status }}
+                      <td>
+                          {% if user.groups.name == 'Admin' %}
+                          <a class="btn btn-sm btn-light-warning"
+                              href="{% url 'Support_update' Issues.pk %}"><i class="far fa-edit btn btn-success"></i>
+                          </a>
+                          {% elif user.groups.name != 'Admin' %}
+                          <a class="btn btn-sm btn-light-warning"
+                              href="{% url 'Support_details' Issues.pk %}"><i class="far fa-eye btn btn-success"></i>
+                          </a>
+                          {% endif %}
+                  </tr>
+                  {% endfor %}
+              </tbody>
+          </table>
+      </div>
+      <!--end: Datatable-->
+      {% else %}
+      {% include 'includes/no_data_found.html' %}
+      {% endif %}
+  </div>
+
+
+
+</div>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+    
+
+    <table class="table list-group-item-secondary my-1" id="kt_datatable">
+        <thead>
+        <tr ><h3 class="text-center"> <strong>Support Details</strong></h3></tr>
+        <tr>
+            <th>Issue Description</th>
+            <th>Admin Feedback</th>
+            <th>Issue Status</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ object.message }}</td>
+                <td>{{ object.admin_reply  }}</td>
+                <td>{{ object.status }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <li class="list-group-item list-group-item-info my-1">{{ object.product_desc }}</li>
+
+{% endblock %}
