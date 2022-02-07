@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 {% extends 'base.html' %}
 
 {% block content %}
@@ -7,11 +8,11 @@
             <div class="card card-custom gutter-b ">
                 <div class="card-header d-flex">
                     <div class="card-title">
-                        <h3 class="card-label">Our Available Products</h3>
+                        <h3 class="card-label">Enter Montly Earnings</h3>
                     </div>
                     {% if user.groups.name == 'Admin' %}
                     <div class="card-toolbar ml-auto">
-                        <a href="{% url 'product_create' %}" class="btn btn-info">Add New</a>
+                        <a href="{% url 'monthlybenifit_create' %}" class="btn btn-info">Add New</a>
                     </div>
                     {% endif %}
                     
@@ -23,38 +24,27 @@
                             <thead>
                                 <tr >
                                     <th>Serials</th>
-                                    <th>Product</th>
-                                    <th>Price</th>
-                                    <th>Quantity</th>
+                                    <th>Year</th>
+                                    <th>Month</th>
+                                    <th>Earnings</th>
                                     <th style="width: 180px">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                
-                                {% for product in object_list %}
-                                    {% if product.product_qty > 0 or user.groups.name == 'Admin' %}
+                                {% for record in object_list %}
                                 <tr>
                                     <td>{{ forloop.counter }}</i></a></td>
-                                    <td>{{ product.product_name | truncatechars:50}}</td>
-                                    <td>{{ product.product_price }}</td>
-                                    <td>{{ product.product_qty }}</td>
+                                    <td>{{ record.year }}</td>
+                                    <td>{{ record.month }}</td>
+                                    <td>{{ record.earnings }}</td>
                                     <td>
-                                            {% if user.groups.name == 'Admin' %}
                                         <a class="btn btn-sm btn-light-warning"
-                                            href="{% url 'product_update' product.pk %}"><i class="far fa-edit btn btn-success"></i></i>
+                                            href="{% url 'monthlybenifit_update' record.pk %}"><i class="far fa-edit btn btn-success"></i></i>
                                         </a>
-                                        <a class="btn btn-sm btn-light-danger"
-                                            href="{% url 'product_delete' product.pk %}"><i
-                                            class="far fa-trash-alt btn btn-danger"></i></a>
-
-                                        {% elif  user.groups.name == 'Buyer' %}
-                                        <a class="btn btn-sm btn-light-danger"
-                                        href="{% url 'product_details' product.pk %}"><i
-                                        class=" fa fa-eye btn btn-success">
-                                        {% endif %}
+                                        
                                     </td>
                                 </tr>
-                                    {% endif %}
                                 {% endfor %}
                             </tbody>
                         </table>

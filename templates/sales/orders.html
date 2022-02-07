@@ -17,7 +17,7 @@
                     {% comment %} {% if filter %}
                     {% include 'includes/filter.html' %}
                     {% endif %} {% endcomment %}
-                    {% comment %} {% if object_list %} {% endcomment %}
+                    {% if object_list %}
                     <!--begin: Table-->
                     <div class="table-responsive">
                         <table class="table" id="kt_datatable" style="width: 100%">
@@ -76,9 +76,9 @@
                         </table>
                     </div>
                     <!--end: Datatable-->
-                    {% comment %} {% else %}
+                    {% else %}
                     {% include 'includes/no_data_found.html' %}
-                    {% endif %} {% endcomment %}
+                    {% endif %} 
                 </div>
                 <div class="card-footer">
                     {% comment %} {% include 'includes/pagination.html' %} {% endcomment %}

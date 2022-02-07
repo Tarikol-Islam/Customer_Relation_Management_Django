@@ -1,65 +1,59 @@
-{% extends 'base.html' %}
-{% block content %}
-    <div id = "divName">
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table text-center" id="kt_datatable" style="width: 100%">
-                    <thead>
-                        <tr >
-                            <th>Serials</th>
-                            <th>Product</th>
-                            <th>Price</th>
-                            <th>Quantity</th>
-                            <th style="width: 180px">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                       
-                        {% comment %} {% for product in object_list %}
-                            {% if product.product_qty > 0 or user.groups.name == 'Admin' %}
-                        <tr>
-                            <td>{{ forloop.counter }}</i></a></td>
-                            <td>{{ product.product_name | truncatechars:50}}</td>
-                            <td>{{ product.product_price }}</td>
-                            <td>{{ product.product_qty }}</td>
-                            <td>
-                                    {% if user.groups.name == 'Admin' %}
-                                <a class="btn btn-sm btn-light-warning"
-                                    href="{% url 'product_update' product.pk %}"><i class="far fa-edit btn btn-success"></i></i>
-                                </a>
-                                <a class="btn btn-sm btn-light-danger"
-                                    href="{% url 'product_delete' product.pk %}"><i
-                                    class="far fa-trash-alt btn btn-danger"></i></a>
+{% extends 'base.html' %} {% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <div class="card card-custom gutter-b " id="divToPrint">
+                <div class="card-header">
+                    <div class="card-title">
+                        <!-- {% if filter %} {% include 'includes/filter.html' %} {% endif %} -->
+                        <form action="" method="get" class="row">
+                            <h3 class="col-md-3 text-black">Montly Report</h3>
+                            <input class="form-control col col-md-3 btn-success" type="month" name="month" id="month"><input class="mx-1 form-control col col-md-1 btn btn-primary" aria-level="Search" type="submit" value="Submit">
+                            <input class="form-control col col-md-1 btn btn-primary" type="button" onClick="PrintDiv('divToPrint');" value="Print">
 
-                                {% elif  user.groups.name == 'Buyer' %}
-                                <a class="btn btn-sm btn-light-danger"
-                                href="{% url 'product_details' product.pk %}"><i
-                                class=" fa fa-eye btn btn-success">
-                                {% endif %}
-                            </td>
-                        </tr>
-                            {% endif %}
-                        {% endfor %} {% endcomment %}
-                    </tbody>
-                </table>
+                        </form>
+                    </div>
+
+                </div>
+                <div class="card-body">
+                    <!--begin: Table-->
+                    {% if object_list %}
+                    <div class="table-responsive">
+                        <table class="table" id="kt_datatable">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Order No</th>
+                                    <th>Order By</th>
+                                    <th>Order Quantiy</th>
+                                    <th>Total Price</th>
+                                    <th>Delivery Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for order in object_list %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ order.order_name | truncatechars:10}}</td>
+                                    <td>{{ order.order_creator }}</td>
+                                    <td>{{ order.order_qty }}</td>
+                                    <td>{{ order.order_total_price }}</td>
+                                    <td>{{ order.delivery_date }}</td>
+
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        <hr>
+                        <h4>Monthly Total sell: {{ monthly_sell }}</h4>
+                    </div>
+                    <!--end: Datatable-->
+                    {% else %} {% include 'includes/no_data_found.html' %} {% endif %}
+                </div>
             </div>
-            <!--end: Datatable-->
-            {% comment %} {% else %}
-            {% include 'includes/no_data_found.html' %}
-            {% endif %} {% endcomment %}
         </div>
-    </div>
-<button class = "btn btn-primary" type = "submit" onClick = "PrintDiv('ToPrint');" value = "Print">Print</button>
-{% endblock %}
 
-{% block js %} 
-    
-    function PrintDiv(divName){
-        var printContents = document.getElementById(divName).innerHTML;
-        var originalContents = document.getElementById(divName).innerHTML;
-        document.getElementById(divName).innerHTML = printContents;
-        window.print();
-        document.body.innerHTML = originalContents;        
-    }
-    
-{% endblock %}
+    </div>
+</div>
+{% endblock %} {% block js %} function PrintDiv(){ var printContents = document.getElementById('divToPrint').innerHTML; var originalContents = document.body.innerHTML; document.body.innerHTML = printContents; window.print(); document.body.innerHTML =
+originalContents } {% endblock %}

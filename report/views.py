@@ -1,21 +1,31 @@
-from datetime import datetime
+from dataclasses import fields
+from datetime import date, datetime
+from itertools import product
 from pyexpat import model
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
+from django.template import context
 # from django.urls import reverse_lazy
 # from django.db.models import fields
 # from django.shortcuts import render
-from django.views.generic import ListView, CreateView, TemplateView
-from pytz import timezone
+from django.views.generic import ListView, TemplateView, CreateView, UpdateView
 from report.models import MonthlyBenifit
 from user.models import Support
-from sales.models import Company, Order
+from sales.models import Company, Order, Product
 from production.models import RawOrder, Supplier
 from datetime import datetime
-
+from .filters import OrderFilter
+from django_filters.views import FilterView
 # Create your views here.
 #Dashboard part
+class SearchView(LoginRequiredMixin,TemplateView):
+    template_name = "sales/products.html"
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['object_list'] = Product.objects.filter(product_name__icontains = self.request.GET.get('search',''))
+        return context
+
 class DashboardView(LoginRequiredMixin ,TemplateView):
     template_name = "report/dashboard.html"
     
@@ -55,14 +65,26 @@ class DashboardView(LoginRequiredMixin ,TemplateView):
         
         return context
 
-class SalesReportView(LoginRequiredMixin, ListView):
-    model = Order
+class SalesReportView(LoginRequiredMixin, TemplateView):
     template_name = "report/salesreport.html"
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
-        context["object_list"] = "object_list"
+        yearmonth = self.request.GET.get('month')
+        if yearmonth == None:
+            yearmonth = datetime.today().replace(day=1,month=(datetime.today().month-1))
+            context["object_list"] = Order.objects.filter(order_status = "Delivered").filter(delivery_date__gte = yearmonth)
+        else:
+            starting = str(yearmonth)+"-01"
+            if yearmonth[5:] != "12":
+                ending = str(yearmonth.replace(yearmonth[5:],str(int(yearmonth[5:])+1)))+"-01"
+            else:
+                ending=str(yearmonth.replace(yearmonth[:4],str(int(yearmonth[:4])+1)))+"-01"
+                ending = ending.replace("12","01")
+            context ["object_list"] = Order.objects.filter(order_status = "Delivered").filter(delivery_date__gte = starting).filter(delivery_date__lt = ending)
+            context["monthly_sell"] = 0
+            for price in context["object_list"]:
+                context["monthly_sell"] = context["monthly_sell"] + price.order_total_price
+            print(context["monthly_sell"])
         return context
     
 
@@ -93,5 +115,23 @@ class SupplierReportView(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context["object_list"] = "object_list"
         return context
+
+class MonthlyBenifitListView(LoginRequiredMixin, ListView):
+    model = MonthlyBenifit
+    template_name = "report/monthlybenifitlist.html"
+    
+class MonthlyBenifitCreateView(LoginRequiredMixin, CreateView):
+    model = MonthlyBenifit
+    fields = '__all__'
+    template_name = "report/monthlybenifitcreate.html"
+
+class MonthlyBenifitUpdateView(LoginRequiredMixin, UpdateView):
+    model = MonthlyBenifit
+    fields = '__all__'
+    template_name = "report/monthlybenifitupdate.html"
+
+
+
+
     
 

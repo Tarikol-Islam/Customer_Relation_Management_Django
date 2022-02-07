@@ -14,7 +14,8 @@ class OrderCreateForm(forms.ModelForm):
 
 class OrderUpdateForm(forms.ModelForm):
     delivery_date = forms.DateField(required=False, help_text='Will be given by the Admin only')
-    order_status = forms.ChoiceField(required=False)
+    order_status_choice = (("New","New"),("Processing","Processing"),("Delivered","Delivered"),("Cancelled","Cancelled"))
+    order_status = forms.ChoiceField(required=False, choices = order_status_choice)
     order_total_price = forms.FloatField(required=False)
     class Meta:
         model = Order
